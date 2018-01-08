@@ -1,0 +1,9 @@
+{
+  "tool-class": "CbrainTask::PSOMWorker",
+  "description": "A PSOM worker submitted by PSOM through cbrain-psom-worker-submit.",
+  "parameters": {
+    "output_dir": "${OUTPUT_DIR}",
+    "worker_id": "${WORKER_ID}"
+  },
+  "required-to-post-process": false
+}

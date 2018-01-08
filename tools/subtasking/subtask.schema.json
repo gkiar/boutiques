@@ -1,0 +1,29 @@
+{
+  "type": "object",
+  "required": [ "tool-class", "parameters" ],
+  "properties": {
+    "tool-class": {
+      "type": "string"
+    },
+    "tool-config-id": {
+      "type": "number"
+    },
+    "share-wd-tid": {
+      "type": "string"
+    },
+    "description": {
+      "type": "string"
+    },
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "type": "string" 
+      }
+    },
+    "prerequisites": {
+      "type": "string"
+    },
+    "required-to-post-process": {
+      "type": "boolean"
+    }
+}
