@@ -26,4 +26,5 @@
     "required-to-post-process": {
       "type": "boolean"
     }
+  }
 }
