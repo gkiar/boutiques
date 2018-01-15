@@ -25,8 +25,8 @@
 # SOFTWARE.
 
 import time
-import threading
 import os.path as op
+from subprocess import Popen
 from watchdog.observers import Observer
 from watchdog.events import FileSystemEventHandler
 
@@ -60,19 +60,18 @@ class subtaskHandler(FileSystemEventHandler):
             return None
 
         elif event.event_type == 'created':
-            from boutiques import bosh
-
             fpath, fname = event.src_path, op.basename(event.src_path)
             print("Received created event - {}.".format(fname))
 
             ext = op.splitext(fname)[-1].upper()
             if ext == ".JSON":
                 print("JSON Created - check compliance to subtask schema")
+                sfile, efile = fpath + ".stdout", fpath + ".stderr"
+                thing = Popen(["bosh", "--help"], stdout=open(sfile, 'w'),
+                              stderr=open(efile, 'w'))
             elif ext == ".CBID":
                 print("CBID Created - check record ID of subtask")
 
-            # thing = threading.Thread(target=bosh, args=["--help"])
-            # thing.start()
 
         elif event.event_type == 'modified':
             print("Received modified event - {}.".format(event.src_path))
