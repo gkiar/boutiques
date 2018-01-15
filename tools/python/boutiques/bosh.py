@@ -270,6 +270,21 @@ def evaluate(*params):
     return query_results[0] if len(query_results) == 1 else query_results
 
 
+def subtask(*params):
+    parser = ArgumentParser("Monitors a working directory to launch subtasks")
+    parser.add_argument("watchdir", action="store",
+                        help="Directory to watch for subtasks.")
+    result = parser.parse_args(params)
+
+    try:
+        from boutiques.subtask import subtaskWatcher, subtaskHandler
+        watcher = subtaskWatcher(result.watchdir)
+        watcher.run()
+
+    except KeyboardInterrupt:
+        print("Cancelled")
+
+
 def bosh(args=None):
     parser = ArgumentParser(description="Driver for Bosh functions",
                             add_help=False)
@@ -283,9 +298,10 @@ def bosh(args=None):
                         "an entry in NeuroLinks for the descriptor and tool."
                         "Invocation: generates the invocation schema for a "
                         "given descriptor. Eval: given an invocation and a "
-                        "descriptor, queries execution properties.",
-                        choices=["validate", "exec", "import",
-                                 "publish", "invocation", "evaluate"])
+                        "descriptor, queries execution properties. Subtask: "
+                        "given a directory, monitors and launches subtasks.",
+                        choices=["validate", "exec", "import", "publish",
+                                 "invocation", "evaluate", "subtask"])
     parser.add_argument("--help", "-h", action="store_true",
                         help="show this help message and exit")
 
@@ -295,22 +311,19 @@ def bosh(args=None):
 
     if func == "validate":
         out = validate(*params)
-        return out
     elif func == "exec":
         out = execute(*params)
-        return out
     elif func == "import":
         out = importer(*params)
-        return out
     elif func == "publish":
         out = publish(*params)
-        return out
     elif func == "invocation":
         out = invocation(*params)
-        return out
     elif func == "evaluate":
         out = evaluate(*params)
-        return out
+    elif func == "subtask":
+        out = subtask(*params)
     else:
         parser.print_help()
         raise SystemExit 
+    return out

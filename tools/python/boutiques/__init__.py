@@ -6,6 +6,7 @@ from .validator import validate_descriptor
 from .bids import validate_bids
 from .publisher import Publisher
 from .evaluate import evaluateEngine
+from .subtask import subtaskWatcher, subtaskHandler
 from .bosh import *
 
 __all__ = ['localExec',
@@ -14,5 +15,6 @@ __all__ = ['localExec',
            'bids',
            'publisher',
            'evaluate',
+           'subtask',
            'bosh']
 
