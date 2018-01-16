@@ -265,7 +265,6 @@ class LocalExecutor(object):
     self.in_dict = {}
     # Fill in the required parameters
     for reqp in [r for r in self.inputs if not r.get('optional')]:
-      print(reqp['id'])
       self.in_dict[reqp['id']] = makeParam(reqp)
     # Fill in a random choice for each one-is-required group
     for grp in [g for g in self.groups if self.safeGrpGet(g['id'],'one-is-required')]:
@@ -278,7 +277,7 @@ class LocalExecutor(object):
     # Choose a random number of times to try to fill optional inputs
     opts = [p for p in self.inputs if self.safeGet(p['id'],'') in [None,True]]
     # Loop a random number of times, each time attempting to fill a random parameter
-    for _ in range(rnd.randint( len(opts) / 2 + 1, len(opts) * 2)):
+    for _ in range(rnd.randint( int(len(opts) / 2 + 1), len(opts) * 2)):
       targ = rnd.choice( opts ) # Choose an optional output
       # If it is already filled in, continue
       if targ['id'] in list(self.in_dict.keys()): continue

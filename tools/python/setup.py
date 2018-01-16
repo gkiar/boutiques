@@ -6,6 +6,7 @@ DEPS = [
          "jsonschema",
          "gitpython",
          "PyGithub",
+         "watchdog"
        ]
 
 setup(name="boutiques",
