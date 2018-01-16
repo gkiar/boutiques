@@ -24,6 +24,7 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
+import os
 import time
 import os.path as op
 from subprocess import Popen
@@ -45,9 +46,9 @@ class subtaskWatcher:
         try:
             while True:
                 time.sleep(1)
-        except:
+        except KeyboardInterrupt:
             self.observer.stop()
-            print("Error")
+            print("Keyboard Interrupt")
 
         self.observer.join()
 
@@ -61,18 +62,29 @@ class subtaskHandler(FileSystemEventHandler):
 
         elif event.event_type == 'created':
             fpath, fname = event.src_path, op.basename(event.src_path)
-            print("Received created event - {}.".format(fname))
 
-            ext = op.splitext(fname)[-1].upper()
-            if ext == ".JSON":
+            fname, ext = op.splitext(fname)
+            if ext.upper() == ".JSON":
                 print("JSON Created - check compliance to subtask schema")
-                sfile, efile = fpath + ".stdout", fpath + ".stderr"
-                thing = Popen(["bosh", "--help"], stdout=open(sfile, 'w'),
-                              stderr=open(efile, 'w'))
-            elif ext == ".CBID":
+
+                sfile = op.splitext(fpath)[0] + ".stdout"
+                efile = op.splitext(fpath)[0] + ".stderr"
+
+
+                proc = Popen(["bosh", "--help"], # "launch", "exec", descriptor, invoc],
+                             stdout=open(sfile, 'w'), stderr=open(efile, 'w'))
+
+                fhandle = open(op.splitext(fpath)[0] + ".bid", "w")
+                fhandle.write(str(proc.pid) + '\n')
+                fhandle.close()
+                os.system("rm {}".format(fpath))
+
+            elif ext.upper() == ".CBID":
                 print("CBID Created - check record ID of subtask")
 
-
         elif event.event_type == 'modified':
-            print("Received modified event - {}.".format(event.src_path))
+            print("Received modified event - {}".format(event.src_path))
+
+        elif event.event_type == 'deleted':
+            print("Received deleted event - {}".format(event.src_path))
 

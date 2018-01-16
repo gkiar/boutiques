@@ -276,13 +276,10 @@ def subtask(*params):
                         help="Directory to watch for subtasks.")
     result = parser.parse_args(params)
 
-    try:
-        from boutiques.subtask import subtaskWatcher, subtaskHandler
-        watcher = subtaskWatcher(result.watchdir)
-        watcher.run()
+    from boutiques.subtask import subtaskWatcher, subtaskHandler
+    watcher = subtaskWatcher(result.watchdir)
+    watcher.run()
 
-    except KeyboardInterrupt:
-        print("Cancelled")
 
 
 def bosh(args=None):
