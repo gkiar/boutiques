@@ -48,7 +48,7 @@ class LocalExecutor(object):
     # Returns the required inputs of a given input id, or the empty string
     self.reqsOf     = lambda t: self.safeGet(t,"requires-inputs") or []
     ## Container-image Options ##
-    self.con = self.desc_dict['container-image']
+    self.con = self.desc_dict.get('container-image')
     self.launchDir = None if self.con is None else self.con.get('working-directory')
     ## Extra Options ##
     # Include: forcePathType and destroyTempScripts
@@ -69,7 +69,7 @@ class LocalExecutor(object):
     command, exit_code, con = self.cmdLine[0], None, self.con or {}
     print('Attempting execution of command:\n\t' + command + '\n---/* Start program output */---')
     # Check for Container image
-    conType, conImage = con['type'], con['image']
+    conType, conImage = con.get('type'), con.get('image')
     conIsPresent = (not conImage is None) 
     # Export environment variables, if they are specified in the descriptor
     envVars = {}
